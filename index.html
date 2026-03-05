@@ -1,49 +1,26 @@
-const handleAnalyze = useCallback((company: Company, announcement: Announcement) => {
-    setCurrentCompany(company);
-    setCurrentAnnouncement(announcement);
-    setReport(null);
-    setIsAnalyzing(true);
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- TODO: Set the document title to the name of your application -->
+    <title>FinInsight · AI投研公告分析助手</title>
+    <meta name="description" content="AI驱动的投研公告分析工具，自动生成结构化投研简报" />
+    <meta name="author" content="Lovable" />
 
-    const steps = PROGRESS_LABELS.map((label) => ({ label, status: 'pending' as StepStatus }));
-    setProgressSteps(steps);
+    <!-- TODO: Update og:title to match your application name -->
+    <meta property="og:title" content="Lovable App" />
+    <meta property="og:description" content="Lovable Generated Project" />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="https://lovable.dev/opengraph-image-p98pqg.png" />
 
-    // 逐步更新进度条
-    let currentStep = 0;
-    const interval = setInterval(() => {
-      setProgressSteps((prev) =>
-        prev.map((s, i) => ({
-          ...s,
-          status: i < currentStep ? 'done' : i === currentStep ? 'active' : 'pending'
-        } as { label: string; status: StepStatus }))
-      );
-      currentStep++;
-      if (currentStep >= PROGRESS_LABELS.length) clearInterval(interval);
-    }, 2000);
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@Lovable" />
+    <meta name="twitter:image" content="https://lovable.dev/opengraph-image-p98pqg.png" />
+  </head>
 
-    // 真实API调用
-    fetch('http://localhost:8000/api/analyze', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        stock_code: company.code,
-        org_id: (company as any).orgId,
-        company_name: company.name,
-        announcement_url: (announcement as any).url,
-        announcement_title: announcement.title,
-        announcement_date: announcement.date,
-      })
-    })
-      .then(r => r.json())
-      .then(data => {
-        clearInterval(interval);
-        setProgressSteps((prev) => prev.map(s => ({ ...s, status: 'done' as StepStatus })));
-        setTimeout(() => {
-          setReport(data);
-          setIsAnalyzing(false);
-        }, 500);
-      })
-      .catch(() => {
-        clearInterval(interval);
-        setIsAnalyzing(false);
-      });
-  }, []);
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
