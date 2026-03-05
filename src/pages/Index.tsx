@@ -68,6 +68,48 @@ export default function Index() {
         setIsAnalyzing(false);
       });
   }, []);
+
+    const steps = PROGRESS_LABELS.map((label) => ({ label, status: 'pending' as StepStatus }));
+    setProgressSteps(steps);
+
+    let currentStep = 0;
+    const interval = setInterval(() => {
+      setProgressSteps((prev) =>
+        prev.map((s, i) => ({
+          ...s,
+          status: i < currentStep ? 'done' : i === currentStep ? 'active' : 'pending'
+        } as { label: string; status: StepStatus }))
+      );
+      currentStep++;
+      if (currentStep >= PROGRESS_LABELS.length) clearInterval(interval);
+    }, 2000);
+
+    fetch('http://localhost:8000/api/analyze', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        stock_code: company.code,
+        org_id: company.orgId,
+        company_name: company.name,
+        announcement_url: announcement.url,
+        announcement_title: announcement.title,
+        announcement_date: announcement.date,
+      })
+    })
+      .then(r => r.json())
+      .then(data => {
+        clearInterval(interval);
+        setProgressSteps((prev) => prev.map(s => ({ ...s, status: 'done' as StepStatus })));
+        setTimeout(() => {
+          setReport(data);
+          setIsAnalyzing(false);
+        }, 500);
+      })
+      .catch(() => {
+        clearInterval(interval);
+        setIsAnalyzing(false);
+      });
+  }, []);
   
     const steps = PROGRESS_LABELS.map((label) => ({ label, status: 'pending' as StepStatus }));
     setProgressSteps(steps);
