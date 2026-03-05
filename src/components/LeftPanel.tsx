@@ -1,8 +1,20 @@
 import { useState, useCallback, useEffect } from 'react';
 import { Search, ChevronDown, Loader2, Database, Building2, FileText } from 'lucide-react';
-import { Company, Announcement } from '@/data/mockData';
 
 const API_BASE = 'http://localhost:8000';
+
+interface Company {
+  name: string;
+  code: string;
+  orgId: string;
+}
+
+interface Announcement {
+  id: string;
+  title: string;
+  date: string;
+  url: string;
+}
 
 interface KbCompany { name: string; code: string; count: number; }
 interface KbData { totalAnnouncements: number; totalCompanies: number; companies: KbCompany[]; }
@@ -24,7 +36,10 @@ export default function LeftPanel({ onAnalyze, isAnalyzing }: LeftPanelProps) {
   const [kb, setKb] = useState<KbData>({ totalAnnouncements: 0, totalCompanies: 0, companies: [] });
 
   useEffect(() => {
-    fetch(`${API_BASE}/api/kb`).then(r => r.json()).then(setKb).catch(() => {});
+    fetch(`${API_BASE}/api/kb`)
+      .then(r => r.json())
+      .then(setKb)
+      .catch(() => {});
   }, []);
 
   const handleSearch = useCallback((value: string) => {
@@ -52,7 +67,7 @@ export default function LeftPanel({ onAnalyze, isAnalyzing }: LeftPanelProps) {
     fetch(`${API_BASE}/api/announcements`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ stock_code: company.code, org_id: (company as any).orgId })
+      body: JSON.stringify({ stock_code: company.code, org_id: company.orgId })
     })
       .then(r => r.json())
       .then(data => { setAnnouncements(data.announcements || []); setIsLoadingAnnouncements(false); })
@@ -121,7 +136,9 @@ export default function LeftPanel({ onAnalyze, isAnalyzing }: LeftPanelProps) {
               {announcements.map((a) => (
                 <button key={a.id} onClick={() => setSelectedAnnouncement(a)}
                   className={`w-full text-left px-3 py-2.5 rounded-lg border text-sm transition-all ${
-                    selectedAnnouncement?.id === a.id ? 'bg-primary/10 border-primary/30' : 'bg-secondary border-transparent hover:bg-primary/5 hover:border-primary/20'}`}>
+                    selectedAnnouncement?.id === a.id
+                      ? 'bg-primary/10 border-primary/30'
+                      : 'bg-secondary border-transparent hover:bg-primary/5 hover:border-primary/20'}`}>
                   <div className="flex items-start gap-2">
                     <FileText className="w-3.5 h-3.5 text-muted-foreground mt-0.5 flex-shrink-0" />
                     <div className="min-w-0">
@@ -139,7 +156,9 @@ export default function LeftPanel({ onAnalyze, isAnalyzing }: LeftPanelProps) {
           <div className="animate-fade-slide-up pt-2">
             <button onClick={() => onAnalyze(selectedCompany, selectedAnnouncement)} disabled={isAnalyzing}
               className={`w-full py-3 rounded-lg font-medium text-sm transition-all flex items-center justify-center gap-2 ${
-                isAnalyzing ? 'bg-primary/60 text-primary-foreground cursor-not-allowed' : 'bg-primary text-primary-foreground hover:bg-primary/90 glow-pulse'}`}>
+                isAnalyzing
+                  ? 'bg-primary/60 text-primary-foreground cursor-not-allowed'
+                  : 'bg-primary text-primary-foreground hover:bg-primary/90 glow-pulse'}`}>
               {isAnalyzing ? <><Loader2 className="w-4 h-4 animate-spin" />分析中...</> : '🔍 开始分析'}
             </button>
           </div>
