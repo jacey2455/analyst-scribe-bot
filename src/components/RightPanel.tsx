@@ -3,7 +3,7 @@ import type { AnalysisReport } from '@/data/mockData';
 
 interface RightPanelProps {
   report: AnalysisReport | null;
-  progressSteps: { label: string; status: 'pending' | 'active' | 'done' }[];
+  progressSteps: {label: string;status: 'pending' | 'active' | 'done';}[];
   isAnalyzing: boolean;
   companyName?: string;
   announcementTitle?: string;
@@ -13,7 +13,7 @@ export default function RightPanel({ report, progressSteps, isAnalyzing, company
   const sentimentConfig = {
     positive: { emoji: '🟢', label: '正面', className: 'sentiment-positive' },
     neutral: { emoji: '🟡', label: '中性', className: 'sentiment-neutral' },
-    negative: { emoji: '🔴', label: '负面', className: 'sentiment-negative' },
+    negative: { emoji: '🔴', label: '负面', className: 'sentiment-negative' }
   };
 
   const handleDownload = () => {
@@ -42,8 +42,8 @@ export default function RightPanel({ report, progressSteps, isAnalyzing, company
             在左侧搜索公司，选择一篇公告后点击分析。AI将自动识别行业、检索历史与同业案例，生成结构化投研简报。
           </p>
         </div>
-      </div>
-    );
+      </div>);
+
   }
 
   // Progress state
@@ -54,28 +54,28 @@ export default function RightPanel({ report, progressSteps, isAnalyzing, company
           <h2 className="text-lg font-semibold text-foreground mb-1">正在分析</h2>
           <p className="text-sm text-muted-foreground mb-6">{companyName} · {announcementTitle}</p>
           <div className="space-y-1">
-            {progressSteps.map((step, i) => (
-              <div key={i} className={`progress-step ${step.status}`}>
-                {step.status === 'active' && (
-                  <div className="w-4 h-4 rounded-full border-2 border-primary border-t-transparent animate-spin flex-shrink-0" />
-                )}
-                {step.status === 'done' && (
-                  <div className="w-4 h-4 rounded-full bg-sentiment-positive flex items-center justify-center flex-shrink-0">
+            {progressSteps.map((step, i) =>
+            <div key={i} className={`progress-step ${step.status}`}>
+                {step.status === 'active' &&
+              <div className="w-4 h-4 rounded-full border-2 border-primary border-t-transparent animate-spin flex-shrink-0" />
+              }
+                {step.status === 'done' &&
+              <div className="w-4 h-4 rounded-full bg-sentiment-positive flex items-center justify-center flex-shrink-0">
                     <svg className="w-2.5 h-2.5 text-card" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
                       <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                     </svg>
                   </div>
-                )}
-                {step.status === 'pending' && (
-                  <div className="w-4 h-4 rounded-full border-2 border-border flex-shrink-0" />
-                )}
+              }
+                {step.status === 'pending' &&
+              <div className="w-4 h-4 rounded-full border-2 border-border flex-shrink-0" />
+              }
                 <span>{step.label}</span>
               </div>
-            ))}
+            )}
           </div>
         </div>
-      </div>
-    );
+      </div>);
+
   }
 
   if (!report) return null;
@@ -87,9 +87,9 @@ export default function RightPanel({ report, progressSteps, isAnalyzing, company
         {/* Tags */}
         <div className="flex flex-wrap gap-2 animate-fade-slide-up">
           <span className="badge-industry">🏭 {report.industry}</span>
-          {report.comparables.map((c) => (
-            <span key={c} className="badge-comparable">对比 {c}</span>
-          ))}
+          {report.comparables.map((c) =>
+          <span key={c} className="badge-comparable">对比 {c}</span>
+          )}
         </div>
 
         {/* Recall Panel */}
@@ -102,17 +102,17 @@ export default function RightPanel({ report, progressSteps, isAnalyzing, company
             <div>
               <p className="text-[11px] text-muted-foreground mb-1.5">同公司历史</p>
               <div className="flex flex-wrap gap-1.5">
-                {report.recalls.filter(r => r.source === 'self').map((r, i) => (
-                  <span key={i} className="badge-recall-self">{r.title} · {r.date}</span>
-                ))}
+                {report.recalls.filter((r) => r.source === 'self').map((r, i) =>
+                <span key={i} className="badge-recall-self">{r.title} · {r.date}</span>
+                )}
               </div>
             </div>
             <div>
               <p className="text-[11px] text-muted-foreground mb-1.5">同行业</p>
               <div className="flex flex-wrap gap-1.5">
-                {report.recalls.filter(r => r.source === 'peer').map((r, i) => (
-                  <span key={i} className="badge-recall-peer">{r.company} · {r.title.replace(/.*?\d{4}年/, '')}</span>
-                ))}
+                {report.recalls.filter((r) => r.source === 'peer').map((r, i) =>
+                <span key={i} className="badge-recall-peer bg-red-50 text-red-400">{r.company} · {r.title.replace(/.*?\d{4}年/, '')}</span>
+                )}
               </div>
             </div>
           </div>
@@ -134,7 +134,7 @@ export default function RightPanel({ report, progressSteps, isAnalyzing, company
             影响判断
           </h3>
           <div className="flex items-start gap-3">
-            <span className="text-2xl">{s.emoji}</span>
+            <span className="text-center text-sm">{s.emoji}</span>
             <div>
               <span className={`text-sm font-semibold ${s.className}`}>{s.label}</span>
               <p className="text-sm text-muted-foreground mt-0.5 leading-relaxed">{report.sentimentReason}</p>
@@ -194,12 +194,12 @@ export default function RightPanel({ report, progressSteps, isAnalyzing, company
             关键数据
           </h3>
           <div className="space-y-2">
-            {report.keyData.map((d, i) => (
-              <div key={i} className="flex items-center justify-between py-1.5 border-b border-border last:border-0">
+            {report.keyData.map((d, i) =>
+            <div key={i} className="flex items-center justify-between py-1.5 border-b border-border last:border-0">
                 <span className="text-sm text-muted-foreground">{d.label}</span>
                 <span className="text-sm font-mono font-medium text-foreground">{d.value}</span>
               </div>
-            ))}
+            )}
           </div>
         </div>
 
@@ -207,12 +207,12 @@ export default function RightPanel({ report, progressSteps, isAnalyzing, company
         <button
           onClick={handleDownload}
           className="w-full py-2.5 rounded-lg border border-border bg-card hover:bg-secondary text-sm font-medium text-foreground flex items-center justify-center gap-2 transition-all animate-fade-slide-up"
-          style={{ animationDelay: '0.45s' }}
-        >
+          style={{ animationDelay: '0.45s' }}>
+          
           <Download className="w-4 h-4" />
           下载分析报告 (.md)
         </button>
       </div>
-    </div>
-  );
+    </div>);
+
 }
