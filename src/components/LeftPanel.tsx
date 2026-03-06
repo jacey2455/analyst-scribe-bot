@@ -1,7 +1,7 @@
 import { useState, useCallback, useEffect } from 'react';
 import { Search, ChevronDown, Loader2, Database, Building2, FileText } from 'lucide-react';
 
-const API_BASE = 'http://fininsight-backend-production.up.railway.app';
+const API_BASE = 'https://fininsight-backend-production.up.railway.app';
 
 interface Company {
   name: string;

@@ -53,7 +53,7 @@ export default function Index() {
     }, 1500);
 
     // 4. 调用后端 API
-    fetch('http://fininsight-backend-production.up.railway.app', {
+    fetch('https://fininsight-backend-production.up.railway.app', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
